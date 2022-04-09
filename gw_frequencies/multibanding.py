@@ -41,18 +41,16 @@ def seglen_from_freq(
             this is used to give an upper bound on the seglen.
             Defaults to 2.
     power_of_two : bool
-        whether to return a frequency spacing which is a round power of two.
-        Defaults to True.
+            whether to return a frequency spacing which is a round power of two.
+            Defaults to True.
     margin_percent : float
-        percent of margin to be added to the seglen, so that
-        :math:`\Delta f < 1 / (T + \delta T)` holds for
-        :math:`\delta T \leq T (\text{margin} / 100)`.
+            percent of margin to be added to the seglen, so that
+            :math:`\Delta f < 1 / (T + \delta T)` holds for
+            :math:`\delta T \leq T (\text{margin} / 100)`.
 
-        This should not be too low, since varying the waveform parameters
-        can perturb the seglen and make it a bit higher than the
-        Newtonian approximation used in this formula.
-
-
+            This should not be too low, since varying the waveform parameters
+            can perturb the seglen and make it a bit higher than the
+            Newtonian approximation used in this formula.
 
     Returns
     -------
@@ -69,7 +67,7 @@ def seglen_from_freq(
     return 2 ** (np.ceil(np.log2(seglen))) if power_of_two else seglen
 
 
-def reduced_frequency_array(f_min: float, f_max: float, f_pivot: float) -> np.ndarray:
+def mixed_frequency_grid(f_min: float, f_max: float, f_pivot: float, **seglen_kwargs) -> np.ndarray:
     r"""Compute an array of frequencies which are a good guess to represent
     a gravitational waveform starting at a given minimum frequency.
 
@@ -96,10 +94,10 @@ def reduced_frequency_array(f_min: float, f_max: float, f_pivot: float) -> np.nd
     """
 
     if f_min <= f_pivot <= f_max:
-        df_pivot = 1 / seglen_from_freq(f_pivot)
+        df_pivot = 1 / seglen_from_freq(f_pivot, **seglen_kwargs)
         return np.append(
-            low_frequency_grid(f_min, f_pivot - df_pivot),
-            high_frequency_grid(f_pivot, f_max),
+            low_frequency_grid(f_min, f_pivot - df_pivot, **seglen_kwargs),
+            high_frequency_grid(f_pivot, f_max, **seglen_kwargs),
         )
     elif f_max < f_pivot:
         return low_frequency_grid(f_min, f_max)
@@ -107,7 +105,7 @@ def reduced_frequency_array(f_min: float, f_max: float, f_pivot: float) -> np.nd
         return high_frequency_grid(f_min, f_max)
 
 
-def high_frequency_grid(f_min: float, f_max: float):
+def high_frequency_grid(f_min: float, f_max: float, **seglen_kwargs):
     """Uniform grid for the high-frequency regime.
 
     Parameters
@@ -122,12 +120,12 @@ def high_frequency_grid(f_min: float, f_max: float):
     frequencies: np.ndrray
         Frequency array, in Hz.
     """
-    df = 1 / seglen_from_freq(f_min)
+    df = 1 / seglen_from_freq(f_min, **seglen_kwargs)
 
     return np.arange(f_min, f_max + df, step=df)
 
 
-def low_frequency_grid(f_min: float, f_max: float):
+def low_frequency_grid(f_min: float, f_max: float, **seglen_kwargs):
     """Non-uniform grid for the low-frequency regime.
 
     This is achieved by generating points uniformly in
@@ -160,7 +158,7 @@ def low_frequency_grid(f_min: float, f_max: float):
 
     # this df is NOT measured in Hz!
     df_effective = (
-        1 / seglen_from_freq(1, power_of_two=False, margin_percent=50.0) * (5 / 3)
+        1 / seglen_from_freq(1, **seglen_kwargs) * (5 / 3)
     )
 
     scaled_grid = np.arange(
