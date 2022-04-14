@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gw_frequencies"
-version = "0.1.0"
+version = "0.1.1"
 description = "A convenience package to make reduced frequency arrays for the representation of gravitational waveforms."
 authors = ["jacopok <jacopok@gmail.com>"]
 license = "GNU GPL3"
