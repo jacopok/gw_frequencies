@@ -27,7 +27,7 @@ def test_seglen_normalization():
         SEGLEN_20_HZ,
     )
     assert np.isclose(
-        seglen_from_freq(20, maximum_mass_ratio=1.0, margin_percent=0.0),
+        seglen_from_freq(20, maximum_mass_ratio=1.0, margin_percent=0.0, power_of_two=True),
         2 ** (np.ceil(np.log2(SEGLEN_20_HZ))),
     )
 
@@ -40,11 +40,9 @@ def test_reduced_frequency_array_histogram():
     assert np.allclose(
         hist[:10],
         seglen_from_freq(
-            np.arange(30, 40) + 1 / 2, 
-            # power_of_two=False, 
-            # margin_percent=5.0
+            np.arange(30, 40) + 1/2, 
         ),
-        rtol=5e-2,
+        rtol=2e-2,
     )
     assert np.allclose(hist[10:], seglen_from_freq(40.0), rtol=2e-2, atol=1.0)
 

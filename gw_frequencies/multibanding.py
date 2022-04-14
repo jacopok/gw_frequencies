@@ -15,7 +15,7 @@ def seglen_from_freq(
     f_0: float,
     m_tot: float = 2.8,
     maximum_mass_ratio: float = 4.0,
-    power_of_two=True,
+    power_of_two=False,
     margin_percent=5.0,
 ) -> float:
     r"""
