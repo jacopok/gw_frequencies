@@ -3,6 +3,13 @@ name = "gw_frequencies"
 version = "0.1.0"
 description = "A convenience package to make reduced frequency arrays for the representation of gravitational waveforms."
 authors = ["jacopok <jacopok@gmail.com>"]
+license = "GNU GPL3"
+keywords = ["python", "gravitational-waves", "scientific"]
+readme = "README.md"
+homepage = "https://github.com/jacopok/gw_frequencies"
+repository = "https://github.com/jacopok/gw_frequencies"
+
+
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"

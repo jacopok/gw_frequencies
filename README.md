@@ -12,6 +12,9 @@ for more details.
 - `mixed_frequency_grid`, a grid with the low-frequency specification below some pivot 
     and the high-frequency specification above it.
 
+The main idea here is the `low_frequency_grid`, which is a slightly different implementation of the 
+concepts outlined by [Vinciguerra et al, 2017](http://arxiv.org/abs/1703.02062).
+
 To install this package, do:
 ```bash
 pip install gw-frequencies
